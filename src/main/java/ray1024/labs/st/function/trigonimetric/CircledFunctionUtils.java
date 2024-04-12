@@ -10,7 +10,7 @@ public interface CircledFunctionUtils {
         if (x.compareTo(pi2) >= 0) {
             return x.subtract(
                     x.divide(pi2, context)
-                            .setScale(0, RoundingMode.DOWN)
+                            .setScale(0, RoundingMode.HALF_EVEN)
                             .multiply(pi2, context),
                     context);
         }
@@ -19,7 +19,7 @@ public interface CircledFunctionUtils {
             return pi2.subtract(
                     x.subtract(
                             x.divide(pi2, context)
-                                    .setScale(0, RoundingMode.DOWN)
+                                    .setScale(0, RoundingMode.HALF_EVEN)
                                     .multiply(pi2, context),
                             context),
                     context);

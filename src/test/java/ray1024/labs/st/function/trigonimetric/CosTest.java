@@ -1,28 +1,31 @@
 package ray1024.labs.st.function.trigonimetric;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CosTest {
 
     private static final MathContext CONTEXT = MathContext.DECIMAL128;
     private static final BigDecimal DEFAULT_PRECISION = BigDecimal.valueOf(1e-16);
 
-    private final Sin sinMock = Mockito.mock(Sin.class);
+    @Mock
+    private Sin sinMock;
 
-    @Before
+    @BeforeEach
     public void cleanMocks() {
         Mockito.reset(sinMock);
     }
+
 
     @Test
     public void pi2NCos() {
