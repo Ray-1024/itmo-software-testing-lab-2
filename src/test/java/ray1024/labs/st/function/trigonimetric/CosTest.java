@@ -41,7 +41,7 @@ public class CosTest {
         Mockito.when(sinMock.evaluate(Mockito.eq(BigDecimal.valueOf(Math.PI * 1.5)), Mockito.any(), Mockito.any()))
                 .thenReturn(BigDecimal.ONE.negate());
 
-        Cos cos = new Cos(sinMock);
+        Cos cos = new Cos();
 
         assertEquals(cos.evaluate(BigDecimal.valueOf(0), DEFAULT_PRECISION, CONTEXT), BigDecimal.ONE);
         assertEquals(cos.evaluate(BigDecimal.valueOf(Math.PI / 2.0), DEFAULT_PRECISION, CONTEXT), BigDecimal.ZERO);

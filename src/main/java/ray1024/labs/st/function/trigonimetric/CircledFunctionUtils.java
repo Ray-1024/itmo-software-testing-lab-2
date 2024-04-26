@@ -4,23 +4,27 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
-public interface CircledFunctionUtils {
-    static BigDecimal circle(BigDecimal x, MathContext context) {
-        final BigDecimal pi2 = BigDecimal.valueOf(Math.PI * 2.0);
-        if (x.compareTo(pi2) >= 0) {
+public final class CircledFunctionUtils {
+    public static final BigDecimal PI = new BigDecimal("3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679");
+    public static final BigDecimal PI2 = PI.multiply(BigDecimal.TWO);
+    public static final BigDecimal PI_2 = PI.divide(BigDecimal.TWO, RoundingMode.HALF_EVEN);
+    public static final BigDecimal PI3_2 = PI.multiply(BigDecimal.valueOf(3)).divide(BigDecimal.TWO, RoundingMode.HALF_EVEN);
+
+    public static BigDecimal circle(BigDecimal x, MathContext context) {
+        if (x.compareTo(PI2) >= 0) {
             return x.subtract(
-                    x.divide(pi2, context)
+                    x.divide(PI2, context)
                             .setScale(0, RoundingMode.HALF_EVEN)
-                            .multiply(pi2, context),
+                            .multiply(PI2, context),
                     context);
         }
         if (x.signum() < 0) {
             x = x.negate(context);
-            return pi2.subtract(
+            return PI2.subtract(
                     x.subtract(
-                            x.divide(pi2, context)
+                            x.divide(PI2, context)
                                     .setScale(0, RoundingMode.HALF_EVEN)
-                                    .multiply(pi2, context),
+                                    .multiply(PI2, context),
                             context),
                     context);
         }
