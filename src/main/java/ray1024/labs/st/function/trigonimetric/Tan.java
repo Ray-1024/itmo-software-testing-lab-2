@@ -21,8 +21,8 @@ public class Tan extends LimitedIteartionsPrecisionedFunction {
         var sinD = sin.evaluate(x, precision, context);
         var cosD = cos.evaluate(x, precision, context);
 
-        if (cosD.compareTo(BigDecimal.ZERO) == 0)
-            throw new IllegalArgumentException("Cannot calculate tan(x) when cos(x) = 0");
+        if (cosD.abs(context).compareTo(precision) <= 0)
+            throw new IllegalArgumentException("Argument can't be equal to pi/2 + pi*n, n ∈ Z");
 
         return sinD.divide(cosD, context);
     }

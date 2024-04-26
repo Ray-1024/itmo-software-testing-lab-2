@@ -1,51 +1,67 @@
 package ray1024.labs.st.function.trigonimetric;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ray1024.labs.st.function.BasePrecisionedFunctionTest;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static java.math.BigDecimal.ONE;
+import static java.math.BigDecimal.ZERO;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static ray1024.labs.st.function.trigonimetric.CircledFunctionUtils.*;
 
 @ExtendWith(MockitoExtension.class)
-public class CosTest {
+class CosTest extends BasePrecisionedFunctionTest {
 
-    private static final MathContext CONTEXT = MathContext.DECIMAL128;
-    private static final BigDecimal DEFAULT_PRECISION = BigDecimal.valueOf(1e-16);
-
-    @Mock
-    private Sin sinMock;
-
-    @BeforeEach
-    public void cleanMocks() {
-        Mockito.reset(sinMock);
-    }
-
+    private final Cos cos = new Cos();
 
     @Test
-    public void pi2NCos() {
-        Mockito.when(sinMock.evaluate(Mockito.eq(BigDecimal.valueOf(0)), Mockito.any(), Mockito.any()))
-                .thenReturn(BigDecimal.ZERO);
+    void testOnceCallSin() {
+        Sin spySin = spy(new Sin());
+        Cos spiedCos = new Cos(spySin);
+        spiedCos.evaluate(BigDecimal.TEN, precision, context);
+        verify(spySin, atLeastOnce()).evaluate(any(BigDecimal.class), eq(precision), eq(context));
+    }
 
-        Mockito.when(sinMock.evaluate(Mockito.eq(BigDecimal.valueOf(Math.PI / 2.0)), Mockito.any(), Mockito.any()))
-                .thenReturn(BigDecimal.ONE);
+    @Test
+    void useSinMock() {
+        Cos mockedCos = new Cos(SinTest.tableStub());
+        assertEqualsByPrecisionAndContext(ONE, mockedCos.evaluate(ZERO, precision, context));
+        assertEqualsByPrecisionAndContext(ZERO, mockedCos.evaluate(PI_2, precision, context));
+        assertEqualsByPrecisionAndContext(ONE.negate(), mockedCos.evaluate(PI, precision, context));
+        assertEqualsByPrecisionAndContext(ZERO, mockedCos.evaluate(PI3_2, precision, context));
+    }
 
-        Mockito.when(sinMock.evaluate(Mockito.eq(BigDecimal.valueOf(Math.PI)), Mockito.any(), Mockito.any()))
-                .thenReturn(BigDecimal.ZERO);
+    @Test
+    void zero() {
+        assertEqualsByPrecisionAndContext(ONE, cos.evaluate(ZERO, precision, context));
+    }
 
-        Mockito.when(sinMock.evaluate(Mockito.eq(BigDecimal.valueOf(Math.PI * 1.5)), Mockito.any(), Mockito.any()))
-                .thenReturn(BigDecimal.ONE.negate());
+    @Test
+    void pi_2() {
+        assertEqualsByPrecisionAndContext(ZERO, cos.evaluate(PI_2, precision, context));
+    }
 
-        Cos cos = new Cos();
+    @Test
+    void pi() {
+        assertEqualsByPrecisionAndContext(ONE.negate(), cos.evaluate(PI, precision, context));
+    }
 
-        assertEquals(cos.evaluate(BigDecimal.valueOf(0), DEFAULT_PRECISION, CONTEXT), BigDecimal.ONE);
-        assertEquals(cos.evaluate(BigDecimal.valueOf(Math.PI / 2.0), DEFAULT_PRECISION, CONTEXT), BigDecimal.ZERO);
-        assertEquals(cos.evaluate(BigDecimal.valueOf(Math.PI), DEFAULT_PRECISION, CONTEXT), BigDecimal.ONE.negate());
-        assertEquals(cos.evaluate(BigDecimal.valueOf(Math.PI * 1.5), DEFAULT_PRECISION, CONTEXT), BigDecimal.ZERO);
+    @Test
+    void pi3_2() {
+        assertEqualsByPrecisionAndContext(ZERO, cos.evaluate(PI3_2, precision, context));
+    }
+
+    public static Cos tableStub() {
+        Cos mocked = mock(Cos.class);
+        when(mocked.evaluate(eq(ZERO.round(DEFAULT_CONTEXT)), any(BigDecimal.class), any(MathContext.class))).thenReturn(ONE.round(DEFAULT_CONTEXT));
+        when(mocked.evaluate(eq(PI_2.round(DEFAULT_CONTEXT)), any(BigDecimal.class), any(MathContext.class))).thenReturn(ZERO.round(DEFAULT_CONTEXT));
+        when(mocked.evaluate(eq(PI.round(DEFAULT_CONTEXT)), any(BigDecimal.class), any(MathContext.class))).thenReturn(ONE.negate(DEFAULT_CONTEXT));
+        when(mocked.evaluate(eq(PI3_2.round(DEFAULT_CONTEXT)), any(BigDecimal.class), any(MathContext.class))).thenReturn(ZERO.round(DEFAULT_CONTEXT));
+        return mocked;
     }
 }

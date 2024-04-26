@@ -11,23 +11,12 @@ public final class CircledFunctionUtils {
     public static final BigDecimal PI3_2 = PI.multiply(BigDecimal.valueOf(3)).divide(BigDecimal.TWO, RoundingMode.HALF_EVEN);
 
     public static BigDecimal circle(BigDecimal x, MathContext context) {
-        if (x.compareTo(PI2) >= 0) {
-            return x.subtract(
-                    x.divide(PI2, context)
-                            .setScale(0, RoundingMode.HALF_EVEN)
-                            .multiply(PI2, context),
-                    context);
+        while (x.signum() < 0) {
+            x = x.add(PI2, context);
         }
-        if (x.signum() < 0) {
-            x = x.negate(context);
-            return PI2.subtract(
-                    x.subtract(
-                            x.divide(PI2, context)
-                                    .setScale(0, RoundingMode.HALF_EVEN)
-                                    .multiply(PI2, context),
-                            context),
-                    context);
+        while (x.compareTo(PI2) >= 0) {
+            x = x.subtract(PI2, context);
         }
-        return x;
+        return x.round(context);
     }
 }

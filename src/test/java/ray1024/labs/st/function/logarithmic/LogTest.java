@@ -1,15 +1,34 @@
 package ray1024.labs.st.function.logarithmic;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ray1024.labs.st.function.BasePrecisionedFunctionTest;
+
+import static java.math.BigDecimal.ONE;
+import static java.math.BigDecimal.ZERO;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class LogTest {
-    // a = {2,3,5,7,10}
+public class LogTest extends BasePrecisionedFunctionTest {
+    @Test
+    void argumentCantBeNegativeOrZero() {
+        assertThrows(IllegalArgumentException.class, () -> new Ln().evaluate(ONE.negate(), precision, context));
+        assertThrows(IllegalArgumentException.class, () -> new Ln().evaluate(ZERO, precision, context));
+    }
 
-    // x < 0
-    // x == 0
-    // 0 < x < 1
-    // x == 1
-    // x > 1
+    @Test
+    void one() {
+        assertEqualsByPrecisionAndContext(ZERO, new Ln().evaluate(ONE, precision, context));
+    }
+
+    public static Ln tableStub() {
+        Ln ln = mock(Ln.class);
+        when(ln.evaluate(ONE.negate(), DEFAULT_PRECISION, DEFAULT_CONTEXT)).thenThrow(IllegalArgumentException.class);
+        when(ln.evaluate(ZERO, DEFAULT_PRECISION, DEFAULT_CONTEXT)).thenThrow(IllegalArgumentException.class);
+        when(ln.evaluate(ONE, DEFAULT_PRECISION, DEFAULT_CONTEXT)).thenReturn(ZERO);
+        return ln;
+    }
 }

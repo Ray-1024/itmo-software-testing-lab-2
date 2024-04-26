@@ -23,7 +23,6 @@ public class Log extends LimitedIteartionsPrecisionedFunction {
 
     @Override
     public BigDecimal evaluate(BigDecimal x, BigDecimal precision, MathContext context) {
-        if (x.signum() <= 0) throw new IllegalArgumentException("Cannot evaluate log(x) when x <= 0");
         return ln.evaluate(x, precision, context).divide(ln.evaluate(base, precision, context), context);
     }
 }

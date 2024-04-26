@@ -27,7 +27,7 @@ public class Sin extends LimitedIteartionsPrecisionedFunction {
             fact = fact.multiply(BigDecimal.valueOf(index++), context).multiply(BigDecimal.valueOf(index++), context);
             delta = pow.divide(fact, context);
             f = isPositive ? f.add(delta, context) : f.subtract(delta, context);
-        } while (delta.abs().compareTo(precision) > 0);
+        } while (delta.abs(context).compareTo(precision) > 0);
 
         return f;
     }

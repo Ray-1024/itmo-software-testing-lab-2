@@ -19,8 +19,8 @@ public class Sec extends LimitedIteartionsPrecisionedFunction {
     public BigDecimal evaluate(BigDecimal x, BigDecimal precision, MathContext context) {
         BigDecimal cosD = cos.evaluate(x, precision, context);
 
-        if (cosD.compareTo(BigDecimal.ZERO) == 0) {
-            throw new IllegalArgumentException("Cannot evaluate sec(x) when cos(x) is zero");
+        if (cosD.abs(context).compareTo(precision) <= 0) {
+            throw new IllegalArgumentException("Argument can't be equal to pi/2 + pi*n, n ∈ Z");
         }
 
         return BigDecimal.ONE.divide(cos.evaluate(x, precision, context), context);

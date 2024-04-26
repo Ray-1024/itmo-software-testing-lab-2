@@ -20,10 +20,12 @@ public class Cos extends LimitedIteartionsPrecisionedFunction {
         x = CircledFunctionUtils.circle(x, context);
 
         var sinD = sin.evaluate(x, precision, context);
-        var cosD = BigDecimal.ONE.subtract(sinD.pow(2)).sqrt(context);
+        var sin2D = sinD.pow(2, context);
+        if (sin2D.compareTo(BigDecimal.ONE) > 0) sin2D = BigDecimal.ONE;
+        var cosD = BigDecimal.ONE.subtract(sin2D, context).sqrt(context);
 
-        if (x.compareTo(CircledFunctionUtils.PI_2) >= 0 && x.compareTo(CircledFunctionUtils.PI3_2) <= 0)
-            cosD = cosD.negate();
+        if (x.compareTo(CircledFunctionUtils.PI_2) > 0 && x.compareTo(CircledFunctionUtils.PI3_2) < 0)
+            cosD = cosD.negate(context);
 
         return cosD;
     }

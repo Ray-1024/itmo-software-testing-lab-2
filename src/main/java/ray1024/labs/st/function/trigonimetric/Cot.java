@@ -22,8 +22,8 @@ public class Cot extends LimitedIteartionsPrecisionedFunction {
         var sinD = sin.evaluate(x, precision, context);
         var cosD = cos.evaluate(x, precision, context);
 
-        if (sinD.compareTo(BigDecimal.ZERO) == 0)
-            throw new IllegalArgumentException("Cannot calculate cot(x) when sin(x) = 0");
+        if (sinD.abs(context).compareTo(precision) <= 0)
+            throw new IllegalArgumentException("Argument can't be equal to pi*n, n ∈ Z");
 
         return cosD.divide(sinD, context);
     }

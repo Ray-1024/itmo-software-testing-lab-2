@@ -9,6 +9,8 @@ import java.math.MathContext;
 public class Ln extends LimitedIteartionsPrecisionedFunction {
     @Override
     public BigDecimal evaluate(BigDecimal x, BigDecimal precision, MathContext context) {
+        if (x.signum() <= 0) throw new IllegalArgumentException("Argument must be greater than zero");
+
         x = x.subtract(BigDecimal.ONE, context);
 
         BigDecimal f = x;
@@ -25,7 +27,7 @@ public class Ln extends LimitedIteartionsPrecisionedFunction {
             isPositive = !isPositive;
             delta = pow.divide(BigDecimal.valueOf(index++), context);
             f = isPositive ? f.add(delta, context) : f.subtract(delta, context);
-        } while (delta.abs().compareTo(precision) > 0);
+        } while (delta.abs(context).compareTo(precision) > 0);
 
         return f;
     }
